@@ -1,0 +1,5 @@
+---
+artifactory::endpoint: ~
+artifactory::username: ~
+artifactory::password: ~
+artifactory::api_key: ~
