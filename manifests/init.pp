@@ -2,6 +2,25 @@
 #
 # This module downloads Artifacts from Artifactory
 #
+# @example
+#   class { artifactory :
+#     endpoint => 'https://repo.jfrog.org/artifactory',
+#   }
+#
+# @example
+#   class { artifactory :
+#     endpoint => 'https://repo.jfrog.org/artifactory',
+#     api_key  => 'xxxxxxxxxxxxxxx',
+#   }
+#
+# @example
+#   class { artifactory :
+#     endpoint => 'https://repo.jfrog.org/artifactory',
+#     username => 'myuserid',
+#     password => 'secretpassword',
+#   }
+#
+#
 # @param endpoint
 #   The endpoint for the Artifactory server. If you are running the "default"
 #   Artifactory installation using tomcat, don't forget to include the

@@ -1,18 +1,48 @@
 #
 require 'artifactory'
 
+# @summary
+#   Initializes the Artifactory Client with the given parameters
+#
 Puppet::Functions.create_function(:config_endpoint) do
+  # @param endpoint
+  #   The endpoint for the Artifactory server. If you are running the "default"
+  #   Artifactory installation using tomcat, don't forget to include the
+  #   +/artifactoy+ part of the URL.
+  #
+  # @param api_key
+  #   The API key used to authenticate to the Artifactory server.
+  #   You can also use an API key for authentication.
+  #   username and password take precedence so leave them off if you are using an API key.
+  #
   dispatch :config_api_key do
     param 'String', :endpoint
     param 'String', :api_key
   end
 
+  # @param endpoint
+  #   The endpoint for the Artifactory server. If you are running the "default"
+  #   Artifactory installation using tomcat, don't forget to include the
+  #   +/artifactoy+ part of the URL.
+  #
+  # @param username
+  #   The username used to authenticate to the Artifactory server.
+  #
+  # @param password
+  #   The password used to authenticate to the Artifactory server.
+  #   Since this uses HTTP Basic Auth, it is highly recommended that you run Artifactory over SSL.
+  #
   dispatch :config_user_pw do
     param 'String', :endpoint
     param 'String', :username
     param 'String', :password
   end
 
+  # @param endpoint
+  #   The endpoint for the Artifactory server. If you are running the "default"
+  #   Artifactory installation using tomcat, don't forget to include the
+  #   +/artifactoy+ part of the URL.
+  #
   dispatch :config_without_credentials do
     param 'String', :endpoint
   end
@@ -45,7 +75,7 @@ Puppet::Functions.create_function(:config_endpoint) do
   end
 
   def detect_proxy
-    proxy_url = if ENV['xhttp_proxy']
+    proxy_url = if ENV['http_proxy']
                   ENV['http_proxy']
                 elsif ENV['https_proxy']
                   ENV['https_proxy']

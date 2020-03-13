@@ -1,9 +1,52 @@
-# @summary A short summary of the purpose of this defined type.
+# @summary This defined type allows to specify an artifact that should be searched in and downloaded from artifactory.
 #
-# A description of what this defined type does
 #
 # @example
-#   artifactory::artifact { 'namevar': }
+#   artifactory::artifact {'myartifact':
+#     group_id    => 'org.artifactory',
+#     artifact_id => 'artifactory-api',
+#     version     => '',
+#     repository  => 'oss-releases-local',
+#     output      => "/tmp/",
+#     extension   => 'jar',
+#   }
+#
+# @param output
+#   The target file name or folder to store the artifact in.
+#
+# @param group_id
+#   the Maven group id to search for
+#
+# @param artifact_id
+#   the Maven artifact id to search for
+#
+# @param version
+#   the Maven version of the artifact to search for
+#
+# @param repository
+#   the list of repos to search
+#
+# @param extension
+#   the file extension to search
+#
+# @param classifier
+#   the classifer to search for
+#
+# @param ensure
+#   Whether of the artifact should exist at the target location or not and weather it should be updated.
+#
+# @param owner
+#   The user which should own the artifact file. Argument can be a user name or a user ID.
+#   This value will be passed to the owner attribute of a Puppet file resource.
+#
+# @param group
+#   The group which should own the artifact file. Argument can be either a group name or a group ID.
+#   This value will be passed to the group attribute of a Puppet file resource.
+#
+# @param mode
+#   The desired permissions mode for the artifact file, in symbolic or numeric notation.
+#   This value will be passed to the mode attribute of a Puppet file resource.
+#
 define artifactory::artifact (
   String $output,
   String $group_id,

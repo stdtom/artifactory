@@ -2,7 +2,7 @@
   "name": "stdtom-artifactory",
   "version": "0.1.0",
   "author": "stdtom",
-  "summary": "",
+  "summary": "A Puppet module which downloads artifacts from an Artifactory repository.",
   "license": "Apache-2.0",
   "source": "",
   "dependencies": [
