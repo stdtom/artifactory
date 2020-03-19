@@ -4,7 +4,9 @@
   "author": "stdtom",
   "summary": "A Puppet module which downloads artifacts from an Artifactory repository.",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/stdtom/artifactory",
+  "project_page": "https://github.com/stdtom/artifactory",
+  "issues_url": "https://github.com/stdtom/artifactory/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
