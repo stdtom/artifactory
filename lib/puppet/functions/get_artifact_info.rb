@@ -40,6 +40,10 @@ Puppet::Functions.create_function(:get_artifact_info) do
   end
 
   def get_artifact_info(group_id, artifact_id, version, repository, extension)
+    if version == 'latest'
+      version = ''
+    end
+
     latest = Artifact.latest_version(
       group:      group_id,
       name:       artifact_id,

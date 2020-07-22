@@ -41,5 +41,19 @@ describe 'artifactory::artifact' do
         end
       end
     end
+
+    context 'when version=latest' do
+      let(:params) do
+        super().merge(version: 'latest')
+      end
+
+      on_supported_os.each do |os, os_facts|
+        context "on #{os}" do
+          let(:facts) { os_facts }
+
+          it { is_expected.to compile }
+        end
+      end
+    end
   end
 end
