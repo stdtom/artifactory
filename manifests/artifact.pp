@@ -62,55 +62,60 @@ define artifactory::artifact (
 ) {
   $artifact = get_artifact_info($group_id, $artifact_id, $version, $repository, $extension)
 
-  if $output =~ /\/$/ {
-    $target_file = "${output}${artifact[filename]}"
+  if !is_hash($artifact) or (!( 'filename' in $artifact)) or (!( 'download_uri' in $artifact))  {
+    err("Could not find version '${version}' of artifact '${artifact_id}'.")
   } else {
-    $target_file = $output
-  }
 
-  if ($artifactory::api_key) {
-    $auth = "-H \"X-JFrog-Art-Api:${artifactory::api_key}\""
-  } elsif ($artifactory::username and $artifactory::password) {
+    if $output =~ /\/$/ {
+      $target_file = "${output}${artifact[filename]}"
+    } else {
+      $target_file = $output
+    }
+
+    if ($artifactory::api_key) {
+      $auth = "-H \"X-JFrog-Art-Api:${artifactory::api_key}\""
+    } elsif ($artifactory::username and $artifactory::password) {
     $auth = "-u \"${artifactory::username}:${artifactory::password}\""
-  } else {
-    $auth = ''
-  }
-
-  $cmd = $facts['os']['family'] ? {
-    /(W|w)indows/   => "h:/curl.exe -k ${auth} \"${$artifact[download_uri]}\"  -o ${target_file}",
-    default         => "curl -k  \"${$artifact[download_uri]}\"  -o ${target_file} -K- <<< \"${auth}\"",
-  }
-
-  $path = $facts['os']['family'] ? {
-    /(W|w)indows/   => undef,
-    default         => '/usr/bin:/bin:/usr/local/bin:/opt/local/bin',
-  }
-
-  if $ensure == present {
-    exec { "Download ${name}":
-      command => $cmd,
-      path    => $path,
-      creates => $target_file,
+    } else {
+      $auth = ''
     }
-  } elsif $ensure == update {
-    exec { "Download ${name}":
-      command => $cmd,
-      path    => $path,
-    }
-  }
 
-  if $ensure != absent {
-    file { $target_file:
-      ensure  => file,
-      require => Exec["Download ${name}"],
-      owner   => $owner,
-      group   => $group,
-      mode    => $mode,
+    $cmd = $facts['os']['family'] ? {
+      /(W|w)indows/   => "h:/curl.exe -k ${auth} \"${$artifact[download_uri]}\"  -o ${target_file}",
+      default         => "curl -k  \"${$artifact[download_uri]}\"  -o ${target_file} -K- <<< \"${auth}\"",
     }
-  } else {
-    file { "Remove ${name}":
-      ensure => absent,
-      path   => $target_file,
+
+    $path = $facts['os']['family'] ? {
+      /(W|w)indows/   => undef,
+      default         => '/usr/bin:/bin:/usr/local/bin:/opt/local/bin',
+    }
+
+    if $ensure == present {
+      exec { "Download ${name}":
+        command => $cmd,
+        path    => $path,
+        creates => $target_file,
+      }
+    } elsif $ensure == update {
+      exec { "Download ${name}":
+        command => $cmd,
+        path    => $path,
+      }
+    }
+
+    if $ensure != absent {
+      file { $target_file:
+        ensure  => file,
+        require => Exec["Download ${name}"],
+        owner   => $owner,
+        group   => $group,
+        mode    => $mode,
+      }
+    } else {
+      file { "Remove ${name}":
+        ensure => absent,
+        path   => $target_file,
+      }
     }
   }
 }

@@ -42,6 +42,20 @@ describe 'artifactory::artifact' do
       end
     end
 
+    context 'when version does not exist' do
+      let(:params) do
+        super().merge(version: '1.0.1')
+      end
+
+      on_supported_os.each do |os, os_facts|
+        context "on #{os}" do
+          let(:facts) { os_facts }
+
+          it { is_expected.to compile }
+        end
+      end
+    end
+
     context 'when version=latest' do
       let(:params) do
         super().merge(version: 'latest')
@@ -53,6 +67,25 @@ describe 'artifactory::artifact' do
 
           it { is_expected.to compile }
         end
+      end
+    end
+  end
+
+  describe 'with not exisiting artifact_id' do
+    let(:params) do
+      {
+        group_id: 'org.artifactory',
+        artifact_id: 'artifactory-test',
+        repository: 'oss-releases-local',
+        output: '/tmp/',
+      }
+    end
+
+    on_supported_os.each do |os, os_facts|
+      context "on #{os}" do
+        let(:facts) { os_facts }
+
+        it { is_expected.to compile }
       end
     end
   end
