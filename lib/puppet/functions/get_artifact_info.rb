@@ -65,8 +65,10 @@ Puppet::Functions.create_function(:get_artifact_info) do
     )
 
     return_value = {}
-    return_value['filename'] = artifacts.first.download_uri.split('/').last
-    return_value['download_uri'] = artifacts.first.download_uri
+    unless artifacts.first.nil? || artifacts.first == 0
+      return_value['filename'] = artifacts.first.download_uri.split('/').last
+      return_value['download_uri'] = artifacts.first.download_uri
+    end
 
     return_value
   end
