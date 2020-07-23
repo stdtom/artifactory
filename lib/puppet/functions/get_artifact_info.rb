@@ -65,7 +65,7 @@ Puppet::Functions.create_function(:get_artifact_info) do
     )
 
     return_value = {}
-    unless artifacts.first.nil? || artifacts.first == 0
+    unless artifacts.first.nil? || artifacts.first == 0 # rubocop:disable Style/NumericPredicate
       return_value['filename'] = artifacts.first.download_uri.split('/').last
       return_value['download_uri'] = artifacts.first.download_uri
     end
